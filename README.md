@@ -1,10 +1,10 @@
 # 🪙 Gerador de PIX "Copia e Cola" (BR Code) - Multi-Linguagem
 
-[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](gerador_pix.py)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](gerador_pix.js)
-[![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)](gerador_pix.php)
-[![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)](gerador_pix.go)
-[![Lua](https://img.shields.io/badge/Lua-2C2D72?style=for-the-badge&logo=lua&logoColor=white)](gerador_pix.lua)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](src/python/gerador_pix.py)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](src/javascript/gerador_pix.js)
+[![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)](src/php/gerador_pix.php)
+[![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)](src/go/gerador_pix.go)
+[![Lua](https://img.shields.io/badge/Lua-2C2D72?style=for-the-badge&logo=lua&logoColor=white)](src/lua/gerador_pix.lua)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 Este repositório oferece uma coleção de scripts em diversas linguagens de programação (`Python`, `JavaScript/Node.js`, `PHP`, `Go`, `Lua`) para a **geração de códigos "Pix Copia e Cola" estáticos**, também conhecidos como **BR Code**. O objetivo é fornecer uma ferramenta de fácil implementação para desenvolvedores que precisam automatizar cobranças Pix com valor fixo.
@@ -21,6 +21,27 @@ Um dos últimos componentes do código é o `ID 63`, um CRC16 (Cyclic Redundancy
 
 > O CRC16 é um código de verificação de redundância cíclica. Ele funciona como uma "soma de verificação" sofisticada de todos os dados do Pix. Antes de exibir os dados do pagamento, o aplicativo do seu banco calcula seu próprio CRC16 a partir do código recebido e o compara com o CRC16 fornecido no final do código. Se os valores não baterem, o aplicativo exibe um erro, garantindo que o código não foi corrompido ou alterado durante a transmissão. É um pequeno, mas poderoso, guardião da integridade dos seus pagamentos.
 
+## 📁 Estrutura do Projeto
+
+Todos os códigos-fonte estão organizados por linguagem dentro do diretório `src/`:
+
+```
+.
+├── src
+│   ├── python
+│   │   └── gerador_pix.py
+│   ├── javascript
+│   │   └── gerador_pix.js
+│   ├── php
+│   │   └── gerador_pix.php
+│   ├── go
+│   │   └── gerador_pix.go
+│   └── lua
+│       └── gerador_pix.lua
+├── .gitignore
+└── README.md
+```
+
 ## 🚀 Como Usar
 
 Cada implementação é autocontida e pode ser executada diretamente para ver um exemplo prático.
@@ -28,54 +49,56 @@ Cada implementação é autocontida e pode ser executada diretamente para ver um
 ### 🐍 Python
 ```bash
 # Necessário Python 3
-python gerador_pix.py
+python src/python/gerador_pix.py
 ```
 
 ### 📜 JavaScript (Node.js)
 ```bash
 # Necessário Node.js
-node gerador_pix.js
+node src/javascript/gerador_pix.js
 ```
 
 ### 🐘 PHP
 ```bash
 # Necessário PHP CLI
-php gerador_pix.php
+php src/php/gerador_pix.php
 ```
 
 ### 🐹 Go
 ```bash
 # Necessário Go
-go run gerador_pix.go
+go run src/go/gerador_pix.go
 ```
 
 ### 🌙 Lua
 ```bash
 # Necessário interpretador Lua (ex: 5.1+) com o módulo bit32
-lua gerador_pix.lua
+lua src/lua/gerador_pix.lua
 ```
 
 ---
 
 ## 🛠️ Integrando em seu Projeto
 
-A lógica pode ser facilmente importada em seus projetos. Veja exemplos básicos abaixo.
+A lógica pode ser facilmente importada em seus projetos. Veja exemplos básicos abaixo, lembrando de ajustar os caminhos para a nova estrutura de diretórios.
 
 #### Exemplo em Python:
 ```python
-from gerador_pix import GeradorPix
+# Supondo que 'src/python' está no seu sys.path
+from gerador_pix import GeradorPix 
+# ou ajuste o import: from src.python.gerador_pix import GeradorPix
 # ...
 ```
 
 #### Exemplo em JavaScript:
 ```javascript
-const GeradorPix = require('./gerador_pix.js');
+const GeradorPix = require('./src/javascript/gerador_pix.js');
 // ...
 ```
 
 #### Exemplo em PHP:
 ```php
-require_once 'gerador_pix.php';
+require_once 'src/php/gerador_pix.php';
 $gerador = new GeradorPix(/*...*/);
 // ...
 ```
@@ -86,15 +109,17 @@ $gerador = new GeradorPix(/*...*/);
 package main
 
 import "fmt"
-// ... (importar o pacote local se estruturado)
+// Para usar o código de 'src/go', você precisaria estruturá-lo como um módulo Go.
+// Ex: go mod init meurepositorio.com/pix && go get ./src/go
 func main() {
-    gerador, err := NewGeradorPix(/*...*/)
     // ...
 }
 ```
 
 #### Exemplo em Lua:
 ```lua
+-- Adicione 'src/lua' ao seu package.path
+-- package.path = package.path .. ';./src/lua/?.lua'
 local GeradorPix = require("gerador_pix")
 -- ...
 ```
