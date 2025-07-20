@@ -1,0 +1,109 @@
+Desvendando o "Pix Copia e Cola": Transforme sua Chave Pix em um Código de Pagamento Completo
+Transformar uma chave Pix simples em um "Pix Copia e Cola" com valor definido, mensagem e validação de segurança (CRC) é um processo que envolve a estruturação de dados em um formato específico determinado pelo Banco Central do Brasil, conhecido como BR Code. Essencialmente, o "Copia e Cola" é a representação textual de um QR Code do Pix, permitindo o compartilhamento fácil por meio de mensagens de texto ou aplicativos.
+A seguir, um guia detalhado de como essa estrutura é montada, permitindo que qualquer pessoa com conhecimento técnico possa gerar seus próprios códigos "Pix Copia e Cola".
+A Estrutura por Trás do "Copia e Cola": O Padrão BR Code
+O BR Code, que utiliza como base o padrão EMV® QRCPS (QR Code Specification for Payment Systems), organiza as informações de pagamento em uma sequência de campos identificados por um ID (identificador), um tamanho e um valor. Essa estrutura é conhecida como TLV (Type, Length, Value - Tipo, Tamanho, Valor).
+Cada campo no código "Copia e Cola" é uma concatenação desses três elementos. Por exemplo, um campo com ID "54", tamanho de 4 caracteres e valor "10.00" seria representado como 540410.00.
+Passo a Passo para Montar o seu "Pix Copia e Cola"
+Para criar um código "Pix Copia e Cola" a partir de uma chave, siga esta estrutura, concatenando os campos na ordem apresentada.
+1. Indicador do Formato do Payload (ID 00) - Obrigatório
+Este é o primeiro campo e indica a versão do arranjo de pagamento. Atualmente, o valor é sempre "01".
+ID: 00
+Tamanho: 02
+Valor: 01
+Resultado: 000201
+2. Informações da Conta do Lojista/Recebedor (ID 26) - Obrigatório
+Este é um campo composto, ou seja, contém outros sub-campos. Ele agrupa as informações específicas do Pix.
+ID: 26
+Tamanho: Será a soma dos tamanhos dos sub-campos.
+Sub-campos:
+GUI (Globally Unique Identifier) (ID 00): Identifica que é um pagamento Pix.
+ID: 00
+Tamanho: 14
+Valor: br.gov.bcb.pix
+Resultado: 0014br.gov.bcb.pix
+Chave Pix (ID 01): A sua chave Pix (CPF, CNPJ, e-mail, telefone ou chave aleatória).
+ID: 01
+Tamanho: O número de caracteres da sua chave (com 2 dígitos, ex: uma chave de 11 dígitos terá tamanho "11").
+Valor: Sua chave Pix.
+Exemplo (com chave aleatória): 0136123e4567-e89b-12d3-a456-426655440000
+Mensagem para o Pagador (ID 02): Uma descrição para a transação.
+ID: 02
+Tamanho: O número de caracteres da mensagem (com 2 dígitos).
+Valor: A mensagem desejada (ex: "Pagamento do pedido 123").
+Exemplo: 0222Pagamento do pedido 123
+3. Código da Categoria do Comerciante (ID 52) - Obrigatório
+Identifica a categoria do seu negócio. Se não aplicável, pode-se usar "0000".
+ID: 52
+Tamanho: 04
+Valor: 0000
+Resultado: 52040000
+4. Moeda da Transação (ID 53) - Obrigatório
+Indica a moeda da transação. Para o Real Brasileiro, o código é "986".
+ID: 53
+Tamanho: 03
+Valor: 986
+Resultado: 5303986
+5. Valor da Transação (ID 54) - Opcional, mas essencial para o objetivo
+Define o valor a ser pago. Se não for incluído, o pagador deverá inserir o valor manualmente.
+ID: 54
+Tamanho: O número de caracteres do valor (com 2 dígitos).
+Valor: O valor no formato "XX.XX".
+Exemplo (para R$ 50,50): 540550.50
+6. Código do País (ID 58) - Obrigatório
+Indica o país onde a transação ocorre. Para o Brasil, é "BR".
+ID: 58
+Tamanho: 02
+Valor: BR
+Resultado: 5802BR
+7. Nome do Recebedor (ID 59) - Obrigatório
+O nome do titular da chave Pix.
+ID: 59
+Tamanho: O número de caracteres do nome (com 2 dígitos, máximo 25).
+Valor: O seu nome ou da sua empresa.
+Exemplo: 5913NOME COMPLETO
+8. Cidade do Recebedor (ID 60) - Obrigatório
+A cidade onde o recebedor está localizado.
+ID: 60
+Tamanho: O número de caracteres da cidade (com 2 dígitos, máximo 15).
+Valor: O nome da cidade.
+Exemplo: 6008SAO PAULO
+9. Campo de Dados Adicionais (ID 62) - Opcional
+Este campo é composto e pode ser usado para incluir um identificador da transação (TxID).
+ID: 62
+Tamanho: A soma dos tamanhos dos sub-campos.
+Sub-campo:
+Identificador da Transação (ID 05): Um código único para conciliação.
+ID: 05
+Tamanho: O número de caracteres do TxID (com 2 dígitos).
+Valor: O identificador (recomenda-se usar '***' se não houver um específico para Pix estático).
+Exemplo: 0503***
+10. CRC16 (Cyclic Redundancy Check) (ID 63) - Obrigatório
+Este é o último campo e serve para verificar a integridade dos dados. O cálculo é feito sobre toda a string montada até aqui, incluindo o próprio ID e tamanho do CRC (6304).
+ID: 63
+Tamanho: 04
+Cálculo: O CRC utilizado é o CRC-16-CCITT-FFFF. O cálculo deve ser feito sobre a string completa (da etapa 1 à 9) mais a string 6304. O resultado é um valor hexadecimal de 4 caracteres.
+Polinômio: 0x1021
+Valor Inicial: 0xFFFF
+Existem diversas bibliotecas e ferramentas online para calcular o CRC-16-CCITT-FFFF. É crucial que o cálculo seja feito corretamente para que o código seja válido.
+Exemplo Prático de Montagem
+Vamos montar um "Pix Copia e Cola" para uma cobrança de R$ 25,00 com a mensagem "Referente ao mes de Julho" para a chave Pix (aleatória) 123e4567-e89b-12d3-a456-426655440000, em nome de "JOAO SILVA" na cidade de "RIO DE JANEIRO".
+000201 (Payload Format Indicator)
+2677 (Tamanho do Merchant Account Information)
+0014br.gov.bcb.pix
+0136123e4567-e89b-12d3-a456-426655440000
+0223Referente ao mes de Julho
+52040000 (Merchant Category Code)
+5303986 (Transaction Currency)
+540525.00 (Transaction Amount)
+5802BR (Country Code)
+5910JOAO SILVA (Merchant Name)
+6013RIO DE JANEIRO (Merchant City)
+62070503*** (Additional Data Field com TxID genérico)
+String parcial:
+00020126770014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266554400000223Referente ao mes de Julho520400005303986540525.005802BR5910JOAO SILVA6013RIO DE JANEIRO62070503***
+Agora, calcula-se o CRC-16-CCITT-FFFF da string acima + 6304. Supondo que o resultado do CRC seja ABCD:
+6304ABCD
+Resultado Final (Pix Copia e Cola):
+00020126770014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266554400000223Referente ao mes de Julho520400005303986540525.005802BR5910JOAO SILVA6013RIO DE JANEIRO62070503***6304ABCD
+Este código final pode ser copiado e colado em qualquer aplicativo de banco para realizar o pagamento com o valor e a mensagem pré-definidos. Para desenvolvedores, é possível automatizar esse processo com scripts em diversas linguagens de programação.
