@@ -2,10 +2,12 @@
 
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](gerador_pix.py)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](gerador_pix.js)
+[![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)](gerador_pix.php)
+[![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)](gerador_pix.go)
 [![Lua](https://img.shields.io/badge/Lua-2C2D72?style=for-the-badge&logo=lua&logoColor=white)](gerador_pix.lua)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-Este repositório oferece uma coleção de scripts em diversas linguagens de programação (`Python`, `JavaScript/Node.js`, `Lua`) para a **geração de códigos "Pix Copia e Cola" estáticos**, também conhecidos como **BR Code**. O objetivo é fornecer uma ferramenta de fácil implementação para desenvolvedores que precisam automatizar cobranças Pix com valor fixo.
+Este repositório oferece uma coleção de scripts em diversas linguagens de programação (`Python`, `JavaScript/Node.js`, `PHP`, `Go`, `Lua`) para a **geração de códigos "Pix Copia e Cola" estáticos**, também conhecidos como **BR Code**. O objetivo é fornecer uma ferramenta de fácil implementação para desenvolvedores que precisam automatizar cobranças Pix com valor fixo.
 
 ## ✨ O que é o "Pix Copia e Cola"?
 
@@ -21,26 +23,35 @@ Um dos últimos componentes do código é o `ID 63`, um CRC16 (Cyclic Redundancy
 
 ## 🚀 Como Usar
 
-Cada implementação (Python, JS, Lua) é autocontida e pode ser executada diretamente para ver um exemplo prático.
+Cada implementação é autocontida e pode ser executada diretamente para ver um exemplo prático.
 
 ### 🐍 Python
-
 ```bash
 # Necessário Python 3
 python gerador_pix.py
 ```
 
 ### 📜 JavaScript (Node.js)
-
 ```bash
 # Necessário Node.js
 node gerador_pix.js
 ```
 
-### 🌙 Lua
-
+### 🐘 PHP
 ```bash
-# Necessário interpretador Lua (ex: 5.1, 5.3, etc.) com o módulo bit32
+# Necessário PHP CLI
+php gerador_pix.php
+```
+
+### 🐹 Go
+```bash
+# Necessário Go
+go run gerador_pix.go
+```
+
+### 🌙 Lua
+```bash
+# Necessário interpretador Lua (ex: 5.1+) com o módulo bit32
 lua gerador_pix.lua
 ```
 
@@ -48,56 +59,47 @@ lua gerador_pix.lua
 
 ## 🛠️ Integrando em seu Projeto
 
-Para usar em seu próprio código, importe a classe/módulo correspondente e instancie-o com os dados da sua cobrança.
+A lógica pode ser facilmente importada em seus projetos. Veja exemplos básicos abaixo.
 
 #### Exemplo em Python:
 ```python
 from gerador_pix import GeradorPix
-
-gerador = GeradorPix(
-    chave_pix="seu-email@dominio.com",
-    nome_recebedor="NOME DO RECEBEDOR",
-    cidade_recebedor="SAO PAULO",
-    valor=99.90,
-    mensagem="Pagamento do pedido #123"
-)
-codigo_pix = gerador.gerar_codigo()
-print(codigo_pix)
+# ...
 ```
 
 #### Exemplo em JavaScript:
 ```javascript
 const GeradorPix = require('./gerador_pix.js');
+// ...
+```
 
-const gerador = new GeradorPix(
-    "123e4567-e89b-12d3-a456-426655440000",
-    "NOME FANTASIA",
-    "BRASILIA",
-    1.99,
-    "Doacao",
-    "TXID12345"
-);
-const codigoPix = gerador.gerarCodigo();
-console.log(codigoPix);
+#### Exemplo em PHP:
+```php
+require_once 'gerador_pix.php';
+$gerador = new GeradorPix(/*...*/);
+// ...
+```
+
+#### Exemplo em Go:
+```go
+// main.go
+package main
+
+import "fmt"
+// ... (importar o pacote local se estruturado)
+func main() {
+    gerador, err := NewGeradorPix(/*...*/)
+    // ...
+}
 ```
 
 #### Exemplo em Lua:
 ```lua
 local GeradorPix = require("gerador_pix")
-
-local gerador = GeradorPix.new(
-    "11999999999",
-    "EMPRESA LTDA",
-    "PORTO ALEGRE",
-    10.50
-)
-local codigo_pix = gerador:gerar_codigo()
-print(codigo_pix)
+-- ...
 ```
 
 ## 📚 Estrutura do BR Code (Referência Rápida)
-
-O script implementa a seguinte estrutura de campos TLV:
 
 | ID | Obrigatório? | Descrição                      | Exemplo                                |
 |----|:------------:|--------------------------------|----------------------------------------|
@@ -114,4 +116,4 @@ O script implementa a seguinte estrutura de campos TLV:
 
 ---
 
-**Palavras-chave para busca (SEO):** Gerador Pix, Pix Copia e Cola, BR Code, EMV QRCPS, Gerador de QR Code Pix, Pix Estático, Python, JavaScript, Node.js, Lua, Pagamento Instantâneo, Banco Central, CRC16, TLV.
+**Palavras-chave para busca (SEO):** Gerador Pix, Pix Copia e Cola, BR Code, EMV QRCPS, Gerador de QR Code Pix, Pix Estático, Python, JavaScript, Node.js, PHP, Go, Golang, Lua, Pagamento Instantâneo, Banco Central, CRC16, TLV.
