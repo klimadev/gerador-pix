@@ -80,48 +80,158 @@ lua src/lua/gerador_pix.lua
 
 ## 🛠️ Integrando em seu Projeto
 
-A lógica pode ser facilmente importada em seus projetos. Veja exemplos básicos abaixo, lembrando de ajustar os caminhos para a nova estrutura de diretórios.
+A lógica pode ser facilmente importada em seus projetos. Veja exemplos práticos abaixo.
 
 #### Exemplo em Python:
 ```python
-# Supondo que 'src/python' está no seu sys.path
-from gerador_pix import GeradorPix 
-# ou ajuste o import: from src.python.gerador_pix import GeradorPix
-# ...
+# Crie um arquivo, por exemplo, 'meu_app.py' na raiz do projeto.
+import sys
+# Adiciona o diretório do script ao path do Python
+sys.path.append('./src/python')
+
+from gerador_pix import GeradorPix
+
+# 1. Crie uma instância do gerador
+gerador = GeradorPix(
+    chave_pix="seuemail@exemplo.com.br",
+    nome_recebedor="NOME DO RECEBEDOR",
+    cidade_recebedor="SAO PAULO",
+    valor=1.99,
+    mensagem="Pagamento do pedido 123",
+    txid="PEDIDO123"
+)
+
+# 2. Gere o código
+codigo = gerador.gerar_codigo()
+
+# 3. Exiba o código
+print("Pix Copia e Cola:", codigo)
+
+# Você pode então usar esse 'codigo' para gerar um QR Code
+# com bibliotecas como 'qrcode' (pip install qrcode)
+# import qrcode
+# img = qrcode.make(codigo)
+# img.save("pix_qr_code.png")
+# print("QR Code salvo como pix_qr_code.png")
+
 ```
 
 #### Exemplo em JavaScript:
 ```javascript
+// Crie um arquivo, por exemplo, 'meuApp.js' na raiz do projeto.
 const GeradorPix = require('./src/javascript/gerador_pix.js');
-// ...
+
+// 1. Crie uma instância do gerador
+const gerador = new GeradorPix(
+    '123.456.789-00',          // Chave PIX (CPF, CNPJ, Celular, Email ou Chave Aleatória)
+    'NOME COMPLETO DO LOJISTA',// Nome do recebedor
+    'CIDADE',                  // Cidade do recebedor
+    99.90,                     // Valor (opcional)
+    'Fatura #456',             // Mensagem (opcional)
+    'FATURA456'                // TxID (identificador da transação)
+);
+
+// 2. Gere o código
+const codigoPix = gerador.gerarCodigo();
+
+// 3. Exiba o código
+console.log('Código "Copia e Cola":', codigoPix);
 ```
 
 #### Exemplo em PHP:
 ```php
+<?php
+// Crie um arquivo, por exemplo, 'index.php' na raiz do projeto.
 require_once 'src/php/gerador_pix.php';
-$gerador = new GeradorPix(/*...*/);
-// ...
+
+// 1. Crie uma instância do gerador
+$gerador = new GeradorPix(
+    'a1b2c3d4-e5f6-7890-1234-567890abcdef', // Chave Aleatória
+    'EMPRESA XYZ LTDA',
+    'BELO HORIZONTE',
+    150.00,
+    'Servico de Consultoria',
+    'CONSULTORIA2024'
+);
+
+// 2. Gere o código
+$codigoPix = $gerador->gerarCodigo();
+
+// 3. Exiba o código (em um ambiente web, use htmlspecialchars)
+echo '<h1>Pague com Pix</h1>';
+echo '<p>Código Copia e Cola:</p>';
+echo '<pre>' . htmlspecialchars($codigoPix) . '</pre>';
+?>
 ```
 
 #### Exemplo em Go:
 ```go
+// Para usar o código de 'src/go', você precisaria estruturá-lo como um módulo Go.
+// 1. Vá para a raiz do seu projeto e inicie um módulo:
+//    go mod init meurepositorio.com/pix
+// 2. Crie um arquivo 'main.go' na raiz:
+
 // main.go
 package main
 
-import "fmt"
-// Para usar o código de 'src/go', você precisaria estruturá-lo como um módulo Go.
-// Ex: go mod init meurepositorio.com/pix && go get ./src/go
+import (
+	"fmt"
+	"log"
+	pix "meurepositorio.com/pix/src/go" // Importando o pacote local
+)
+
 func main() {
-    // ...
+	// 1. Crie uma instância do gerador
+	gerador, err := pix.NewGeradorPix(
+		"+5511987654321",         // Chave PIX (Celular)
+		"ANA SOUZA",              // Nome do recebedor
+		"SALVADOR",               // Cidade
+		"Servico de Manutencao",  // Mensagem (opcional)
+		"MANUT01",                // TxID
+		250.75,                   // Valor (opcional)
+	)
+	if err != nil {
+		log.Fatal("Erro ao criar gerador PIX:", err)
+	}
+
+	// 2. Gere o código
+	codigo, err := gerador.GerarCodigo()
+	if err != nil {
+		log.Fatal("Erro ao gerar código PIX:", err)
+	}
+
+	// 3. Exiba o código
+	fmt.Println("Código PIX:", codigo)
 }
 ```
 
 #### Exemplo em Lua:
 ```lua
--- Adicione 'src/lua' ao seu package.path
--- package.path = package.path .. ';./src/lua/?.lua'
+-- Crie um arquivo, por exemplo, 'main.lua' na raiz do projeto.
+
+-- Adicione o diretório do script ao package.path do Lua
+package.path = package.path .. ';./src/lua/?.lua'
+
+-- Importe a classe
 local GeradorPix = require("gerador_pix")
--- ...
+
+-- 1. Crie uma instância
+-- (chave_pix, nome_recebedor, cidade_recebedor, valor, mensagem, txid)
+local gerador = GeradorPix:new(
+    "chavealeatoria-1234-abcd-efgh-9876543210",
+    "MARIA OLIVEIRA",
+    "CURITIBA",
+    "50.00",
+    "Pagamento de produto X",
+    "PRODX_PGTO_1"
+)
+
+-- 2. Gere o código
+local codigo_pix = gerador:gerar_codigo()
+
+-- 3. Exiba o resultado
+print("--- Pagamento via PIX ---")
+print("Código Copia e Cola: " .. codigo_pix)
 ```
 
 ## 📚 Estrutura do BR Code (Referência Rápida)
